@@ -63,7 +63,8 @@ async function login(req, res, next) {
             )
             if (validPassword) {
                 const token = createToken(user)
-                res.status(200).json({ status: "ok", token })
+                user.password = ""
+                res.status(200).json({ status: "ok", token, user: user })
             } else {
                 res.status(400).json({ status: "fail", message: "Password invalid!!!" })
             }
