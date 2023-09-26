@@ -2,6 +2,19 @@ const User = require("../models/User")
 const bcrypt = require("bcrypt")
 const { createToken } = require("../../Util/Authentication")
 
+//[GET]/user/all-user
+async function getAllUser(req, res, next) {
+    try {
+        const allUser = await User.find({}, '-password');
+        res.status(201).send({
+            status: "Success 201: Register successful",
+            users: allUser,
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
 // [POST] /user/register
 async function register(req, res, next) {
     try {
@@ -20,7 +33,7 @@ async function register(req, res, next) {
     }
 }
 
-// [PUT] /user/register
+// [PUT] /user/change-password
 async function changePassword(req, res, next) {
     try {
         let userName = req.params.username
@@ -62,4 +75,4 @@ async function login(req, res, next) {
     }
 }
 
-module.exports = { register, login, changePassword }
+module.exports = { register, login, changePassword, getAllUser };
