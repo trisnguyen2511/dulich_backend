@@ -3,9 +3,10 @@ const jwt = require("jsonwebtoken")
 const expiresTime = "6000000" //100 phút
 
 const createToken = (user) => {
-    const token = jwt.sign({ email: user.email }, process.env.JWT_KEY, {
+    console.log(user)
+    const token = jwt.sign({ user: user.userName }, process.env.JWT_KEY, {
         expiresIn: expiresTime,
-    })
+    });
     return token
 }
 
