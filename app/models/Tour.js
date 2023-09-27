@@ -23,6 +23,10 @@ const Tour = new Schema(
             type: String,
             required: [true, "content required"],
         },
+        deleted: {
+            type: Boolean,
+            default: false
+        },
         description: String,
     },
     { timestamps: true }
@@ -30,7 +34,7 @@ const Tour = new Schema(
 
 module.exports = mongoose.model("Tour", Tour)
 
-const tours = 
+const tours =
     [
         {
             title: "Dũng Tàu",
@@ -45,7 +49,7 @@ const tours =
             brief: "đi chơi cho zui thoi",
             content: "ngày này đi đâu , ngày kia đi đau, ngayf kỉa đi đâu luôn"
 
-        },        {
+        }, {
             title: "Dũng Tàu",
             price: "100000",
             brief: "đi chơi cho zui thoi",

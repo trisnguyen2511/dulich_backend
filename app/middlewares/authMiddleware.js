@@ -3,6 +3,12 @@ const User = require("../models/User")
 
 function authToken(req, res, next) {
     try {
+        if (!req.headers.authorization) {
+            return res.status(400).json({
+                status: "Error 400: Bad Request",
+                message: "Token require",
+            })
+        }
         const token = req.headers.authorization.slice(7)
         if (verifyToken(token)) {
             next()

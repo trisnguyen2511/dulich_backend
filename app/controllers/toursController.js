@@ -1,9 +1,10 @@
 const Tour = require("../models/Tour");
+const User = require("../models/User");
 
 // [GET] /tour
 async function getAllTours(req, res, next) {
   try {
-    const tours = await Tour.find();
+    const tours = await Tour.find({ deleted: false });
     res.status(200).json(
       {
         status: "Success 200: get tours successful",
@@ -39,7 +40,7 @@ async function getPaginationTour(req, res, next) {
     countTour = await Tour.countDocuments()
 
     tours = await Tour
-      .find() // find tất cả các data
+      .find({ deleted: false }) // find tất cả các data
       .skip((perPage * page) - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
       .limit(perPage)
       .exec();
@@ -58,4 +59,50 @@ async function getPaginationTour(req, res, next) {
   }
 }
 
-module.exports = { getAllTours, postNewTour, getPaginationTour };
+// [PUT] /tour/updateTour/:id
+async function updateTour(req, res, next) {
+  try {
+    let id = req.params.id;
+    const { title, price, brief, content } = req.body
+
+    // await User.updateOne({ _id: id }, { $set: { password: bodyRequest.password } });
+    await Tour.findByIdAndUpdate(id, {
+      title,
+      price,
+      brief,
+      content
+    })
+
+    res.status(200).json(
+      {
+        status: "Success 200: update tours successful",
+      }
+    )
+
+  } catch (err) {
+    next(err)
+  }
+}
+
+// [DELETE] /tour/deletetour/:id
+async function deleteTour(req, res, next) {
+  try {
+    let id = req.params.id;
+
+    // await User.updateOne({ _id: id }, { $set: { password: bodyRequest.password } });
+    await Tour.findByIdAndUpdate(id, {
+      deleted: true
+    })
+
+    res.status(200).json(
+      {
+        status: "Success 200: delete tours successful",
+      }
+    )
+
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports = { getAllTours, postNewTour, getPaginationTour, updateTour, deleteTour };
