@@ -37,7 +37,7 @@ async function getPaginationTour(req, res, next) {
   try {
     let perPage = req.query.perpage || 12; // số lượng sản phẩm xuất hiện trên 1 page
     let page = req.query.page || 1;
-    countTour = await Tour.countDocuments()
+    countTour = await Tour.countDocuments({ deleted: false })
 
     tours = await Tour
       .find({ deleted: false }) // find tất cả các data
@@ -50,7 +50,8 @@ async function getPaginationTour(req, res, next) {
         status: "Success 200: get tours successful",
         tours, // tour trên một page
         current: page, // page hiện tại
-        totalPages: Math.ceil(countTour / perPage) // tổng số các page
+        totalPages: Math.ceil(countTour / perPage), // tổng số các page
+        totalTours: countTour
       }
     )
 
