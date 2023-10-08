@@ -1,6 +1,8 @@
 const newsRouter = require("./news")
 const userRouter = require("./auth")
 const tourRouter = require("./tour")
+const dataFooter = require("./dataFooter")
+const sliderHeader = require("./sliderHeader")
 const { authToken } = require("../app/middlewares/authMiddleware")
 const { errorHandler } = require("../app/middlewares/ErrorHandler")
 const { createToken } = require("../Util/Authentication")
@@ -14,6 +16,10 @@ async function route(app) {
     app.use("/user", userRouter)
 
     app.use("/tour", tourRouter)
+
+    app.use("/datafooter", dataFooter)
+
+    app.use("/sliderHeader", sliderHeader)
 
     app.get("/", (req, res) => {
         const user = {
