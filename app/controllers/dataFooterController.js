@@ -19,7 +19,7 @@ async function getDataFooter(req, res, next) {
   }
 }
 
-// [POST] /datafooter/datafooter
+// [POST] /datafooter/changeFooter
 async function updateDataFooter(req, res, next) {
   try {
     // let id = req.params.id;
