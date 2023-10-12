@@ -15,6 +15,10 @@ const Tour = new Schema(
             type: Number,
             required: [true, "price required"],
         },
+        image: {
+            type: String,
+            default: ''
+        },
         brief: {
             type: String,
             required: [true, "brief required"],
@@ -22,6 +26,10 @@ const Tour = new Schema(
         content: {
             type: String,
             required: [true, "content required"],
+        },
+        isRecommend: {
+            type: Boolean,
+            default: false
         },
         deleted: {
             type: Boolean,

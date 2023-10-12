@@ -1,4 +1,5 @@
 const Tour = require("../models/Tour")
+const mongoose = require('mongoose');
 
 function validateCreateTour(req, res, next) {
     try {
@@ -49,6 +50,36 @@ async function validateDeleteTour(req, res, next) {
         res.json(err)
     }
 }
+async function validatePostRecommentTour(req, res, next) {
+    try {
+        const listIdTour = req.body.listSelected
+        // console.log(listIdTour)
+        // if (Array.isArray(listIdTour)) {
+
+        // console.log(listIdTour.every((id) => {
+        //     return mongoose.Types.ObjectId.isValid(id)
+        // }))
+
+        if (!listIdTour.every((id) => {
+            return mongoose.Types.ObjectId.isValid(id)
+        })) {
+            return res.status(400).json({
+                status: "Error 400: Bad Request",
+                message: "inval data",
+            })
+        }
+        // } else {
+        //     return res.status(400).json({
+        //         status: "Error 400: Bad Request",
+        //         message: "inval data",
+        //     })
+        // }
+
+        next()
+    } catch (err) {
+        res.json(err)
+    }
+}
 
 
-module.exports = { validateCreateTour, validateGetPaginationTour, validateUpdateTour, validateDeleteTour }
+module.exports = { validateCreateTour, validateGetPaginationTour, validateUpdateTour, validateDeleteTour, validatePostRecommentTour }

@@ -16,7 +16,7 @@ const verifyToken = (token) => {
             console.log("Authentication error:", err.message)
             return false
         } else {
-            console.log("decoded: ", decoded)
+            // console.log("decoded: ", decoded)
             return true
         }
     })

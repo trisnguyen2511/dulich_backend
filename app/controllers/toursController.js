@@ -39,6 +39,8 @@ async function getPaginationTour(req, res, next) {
     let page = req.query.page || 1;
     countTour = await Tour.countDocuments({ deleted: false })
 
+    listTour = await Tour.find({ deleted: false, isRecommend: true }).distinct('_id')
+
     tours = await Tour
       .find({ deleted: false }) // find tất cả các data
       .skip((perPage * page) - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
@@ -51,7 +53,8 @@ async function getPaginationTour(req, res, next) {
         tours, // tour trên một page
         current: page, // page hiện tại
         totalPages: Math.ceil(countTour / perPage), // tổng số các page
-        totalTours: countTour
+        totalTours: countTour,
+        listSelected: listTour
       }
     )
 
@@ -64,12 +67,13 @@ async function getPaginationTour(req, res, next) {
 async function updateTour(req, res, next) {
   try {
     let id = req.params.id;
-    const { title, price, brief, content } = req.body
+    const { title, price, brief, conten, image } = req.body
 
     // await User.updateOne({ _id: id }, { $set: { password: bodyRequest.password } });
     await Tour.findByIdAndUpdate(id, {
       title,
       price,
+      image,
       brief,
       content
     })
@@ -106,4 +110,25 @@ async function deleteTour(req, res, next) {
   }
 }
 
-module.exports = { getAllTours, postNewTour, getPaginationTour, updateTour, deleteTour };
+
+// [POST] /tour/recommend
+async function postRecommentTour(req, res, next) {
+  try {
+    const listIdTour = req.body.listSelected;
+
+    await Tour.updateMany({}, { isRecommend: false })
+
+    await Tour.updateMany({ _id: { $in: listIdTour } },
+      { $set: { isRecommend: true } },
+      { multi: true })
+
+    res.status(200).json({
+      status: "Success 200: change tour successful",
+    });
+  } catch (err) {
+    next(err)
+  }
+}
+
+
+module.exports = { getAllTours, postNewTour, getPaginationTour, updateTour, deleteTour, postRecommentTour };
