@@ -81,5 +81,19 @@ async function validatePostRecommentTour(req, res, next) {
     }
 }
 
+async function validateGetDetailTour(req, res, next) {
+    try {
+        const id = req.params.id
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({
+                status: "Error 400: Bad Request",
+                message: "id invalid",
+            })
+        }
+        next()
+    } catch (err) {
+        res.json(err)
+    }
+}
 
-module.exports = { validateCreateTour, validateGetPaginationTour, validateUpdateTour, validateDeleteTour, validatePostRecommentTour }
+module.exports = { validateCreateTour, validateGetPaginationTour, validateUpdateTour, validateDeleteTour, validatePostRecommentTour, validateGetDetailTour }

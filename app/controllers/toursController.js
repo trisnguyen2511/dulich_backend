@@ -63,6 +63,33 @@ async function getPaginationTour(req, res, next) {
   }
 }
 
+// [GET] /tour/detailTour:id
+async function getDetailTour(req, res, next) {
+  try {
+    const id = req.params.id
+    const tour = await Tour.findById(id)
+
+    if (!tour) {
+      return res.status(400).json(
+        {
+          status: "Error 400: Tour not exists",
+          // tour
+        }
+      )
+    }
+
+    return res.status(200).json(
+      {
+        status: "Success 200: get tours successful",
+        tour
+      }
+    )
+
+  } catch (err) {
+    next(err)
+  }
+}
+
 // [PUT] /tour/updateTour/:id
 async function updateTour(req, res, next) {
   try {
@@ -131,4 +158,4 @@ async function postRecommentTour(req, res, next) {
 }
 
 
-module.exports = { getAllTours, postNewTour, getPaginationTour, updateTour, deleteTour, postRecommentTour };
+module.exports = { getAllTours, postNewTour, getPaginationTour, updateTour, deleteTour, postRecommentTour, getDetailTour };
