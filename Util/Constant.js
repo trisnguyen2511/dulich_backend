@@ -1,0 +1,5 @@
+module.exports = Object.freeze({
+    TOKEN_EXPIRED: 'TOKEN_EXPIRED',
+    TOKEN_FAILED: 'TOKEN_FAILED',
+    TOKEN_SUCCESS: 'TOKEN_SUCCESS'
+});

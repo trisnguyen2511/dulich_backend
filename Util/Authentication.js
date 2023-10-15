@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken")
+const { TOKEN_EXPIRED, TOKEN_SUCCESS, TOKEN_FAILED } = require('../Util/Constant')
 
 const expiresTime = "6000000" //100 phút
 
@@ -11,13 +12,19 @@ const createToken = (user) => {
 }
 
 const verifyToken = (token) => {
+    const { exp } = jwt.decode(token)
+
+    if (Date.now() >= exp * 1000) {
+        return TOKEN_EXPIRED;
+    }
+
     return jwt.verify(token, process.env.JWT_KEY, (err, decoded) => {
         if (err) {
             console.log("Authentication error:", err.message)
-            return false
+            return TOKEN_FAILED
         } else {
             // console.log("decoded: ", decoded)
-            return true
+            return TOKEN_SUCCESS
         }
     })
 }

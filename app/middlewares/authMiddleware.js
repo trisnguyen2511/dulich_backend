@@ -1,5 +1,6 @@
 const { verifyToken } = require("../../Util/Authentication")
 const User = require("../models/User")
+const { TOKEN_EXPIRED, TOKEN_SUCCESS, TOKEN_FAILED } = require('../../Util/Constant')
 
 function authToken(req, res, next) {
     try {
@@ -10,13 +11,20 @@ function authToken(req, res, next) {
             })
         }
         const token = req.headers.authorization.slice(7)
-        if (verifyToken(token)) {
-            next()
-        } else {
-            return res.status(400).json({
-                status: "Error 400: Bad Request",
-                message: "Authorization failed",
-            })
+        switch (verifyToken(token)) {
+            case TOKEN_EXPIRED:
+                return res.status(405).json({
+                    status: "Error 405: Token expired",
+                    message: "Token expired",
+                });
+            case TOKEN_FAILED:
+                return res.status(400).json({
+                    status: "Error 400: Bad Request",
+                    message: "Authorization failed",
+                })
+            default:
+                next()
+                break;
         }
     } catch (err) {
         next(err)
