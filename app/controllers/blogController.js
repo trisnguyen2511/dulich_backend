@@ -77,7 +77,8 @@ async function getPaginationShortBlog(req, res, next) {
         countBlog = await Blog.countDocuments({ deleted: false })
 
         blogs = await Blog
-            .find({ deleted: false }, 'title brief price image') // find tất cả các data
+            .find({ deleted: false }, 'title brief image createdAt updatedAt') // find tất cả các data
+            .sort({ updatedAt: -1 })
             .skip((perPage * page) - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
             .limit(perPage)
             .exec();
