@@ -122,7 +122,7 @@ async function getDetailTour(req, res, next) {
 async function updateTour(req, res, next) {
   try {
     let id = req.params.id;
-    const { title, price, brief, content, image } = req.body
+    const { title, price, brief, content, image, description } = req.body
 
     // await User.updateOne({ _id: id }, { $set: { password: bodyRequest.password } });
     await Tour.findByIdAndUpdate(id, {
@@ -130,6 +130,7 @@ async function updateTour(req, res, next) {
       price,
       image,
       brief,
+      description,
       content
     })
 

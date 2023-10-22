@@ -2,6 +2,7 @@ const newsRouter = require("./news")
 const userRouter = require("./auth")
 const tourRouter = require("./tour")
 const dataFooter = require("./dataFooter")
+const blogRouter = require("./blog")
 const sliderHeader = require("./sliderHeader")
 const aboutUs = require("./aboutUs")
 const { authToken } = require("../app/middlewares/authMiddleware")
@@ -17,6 +18,8 @@ async function route(app) {
     app.use("/user", userRouter)
 
     app.use("/tour", tourRouter)
+
+    app.use("/blog", blogRouter)
 
     app.use("/datafooter", dataFooter)
 
