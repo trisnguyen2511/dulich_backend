@@ -91,6 +91,36 @@ async function getPaginationShortTour(req, res, next) {
   }
 }
 
+// [GET] /tour/getToutHot
+async function getTourHot(req, res, next) {
+  try {
+    // let perPage = req.query.perpage || 6; // số lượng sản phẩm xuất hiện trên 1 page
+    // let page = req.query.page || 1;
+    // countTour = await Tour.countDocuments({ deleted: false })
+
+    // tours = await Tour
+    //   .find({ deleted: false }, 'title brief price image') // find tất cả các data
+    //   .skip((perPage * page) - perPage) // Trong page đầu tiên sẽ bỏ qua giá trị là 0
+    //   .limit(perPage)
+    //   .exec();
+
+    const tours = await Tour.find({ deleted: false, isRecommend: true })
+
+    res.status(200).json(
+      {
+        status: "Success 200: get tours successful",
+        tours, // tour trên một page
+        // current: page, // page hiện tại
+        // totalPages: Math.ceil(countTour / perPage), // tổng số các page
+        // totalTours: countTour,
+      }
+    )
+
+  } catch (err) {
+    next(err)
+  }
+}
+
 // [GET] /tour/detailTour:id
 async function getDetailTour(req, res, next) {
   try {
@@ -187,4 +217,4 @@ async function postRecommentTour(req, res, next) {
 }
 
 
-module.exports = { getAllTours, postNewTour, getPaginationTour, updateTour, deleteTour, postRecommentTour, getDetailTour, getPaginationShortTour };
+module.exports = { getAllTours, postNewTour, getPaginationTour, updateTour, deleteTour, postRecommentTour, getDetailTour, getPaginationShortTour, getTourHot };

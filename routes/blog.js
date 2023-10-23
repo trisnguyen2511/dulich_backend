@@ -13,7 +13,7 @@ router.get("/getPaginationShortBlog", validateGetPaginationBlog, getPaginationSh
 
 router.get("/detailBlog/:id", validateGetDetailBlog, getDetailBlog)
 
-router.get("/getDetailBlogSlug/:slug", getDetailBlogSlug)
+router.get("/detailBlogSlug/:slug", getDetailBlogSlug)
 
 router.put("/updateBlog/:id", authToken, validateUpdateBlog, updateBlog)
 
