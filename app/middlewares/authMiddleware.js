@@ -1,6 +1,7 @@
 const { verifyToken } = require("../../Util/Authentication")
 const User = require("../models/User")
 const { TOKEN_EXPIRED, TOKEN_SUCCESS, TOKEN_FAILED } = require('../../Util/Constant')
+const bcrypt = require("bcrypt")
 
 function authToken(req, res, next) {
     try {
@@ -37,10 +38,11 @@ function authToken(req, res, next) {
 }
 
 const validatePasword = (password) => {
-    return password.match(
-        // Tối thiểu tám ký tự, ít nhất một chữ cái, một số và một ký tự đặc biệt
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
-    )
+    // return password.match(
+    //     // Tối thiểu tám ký tự, ít nhất một chữ cái, một số và một ký tự đặc biệt
+    //     /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+    // )
+    return true
 }
 
 async function validateRegister(req, res, next) {
@@ -93,12 +95,21 @@ async function validateChangePassword(req, res, next) {
         let userName = req.params.username
         let bodyRequest = req.body
 
+        console.log(bodyRequest)
+
         // if (!bodyRequest.userName) {
         //     return res.status(400).json({
         //         status: "Error 400: Bad Request",
         //         message: "username is required",
         //     })
         // }
+
+        if (!userName) {
+            return res.status(400).json({
+                status: "Error 400: Bad Request",
+                message: "username is required",
+            })
+        }
 
         if (!bodyRequest.password) {
             return res.status(400).json({
@@ -107,10 +118,10 @@ async function validateChangePassword(req, res, next) {
             })
         }
 
-        if (!bodyRequest.fullName) {
+        if (!bodyRequest.oldPassword) {
             return res.status(400).json({
                 status: "Error 400: Bad Request",
-                message: "fullName is required",
+                message: "oldPassword is required",
             })
         }
 
@@ -128,6 +139,18 @@ async function validateChangePassword(req, res, next) {
                 message: "User not exist",
             })
         }
+
+        const validPassword = await bcrypt.compare(
+            bodyRequest.oldPassword,
+            userCheck.password
+        )
+        if (!validPassword) {
+            return res.status(400).json({
+                status: "Error 400: Bad Request",
+                message: "Old password fail",
+            })
+        }
+
         next()
     } catch (err) {
         next(err)
